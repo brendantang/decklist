@@ -6,12 +6,23 @@ require 'pp'
 
 class Decklist
   attr_accessor :cards
-  def initialize(decklist_array)
-    @list = decklist_array 
+  def initialize(decklist_string)
+    @string = decklist_string
+    @list = [] 
     @card_data = {}
+    self.parse_string
     self.get_card_data 
   end
-  
+
+  def parse_string
+    @string.each_line do |line|
+      card_hash = {}
+      card_hash["quantity"] = line[0]
+      card_hash["name"] = line[2..-1].chomp
+      @list << card_hash
+    end
+  end
+
   def get_card_data
     identifiers_array = []
     @list.each do |line|
@@ -40,6 +51,14 @@ class Decklist
   end
 end
 
-decklist_array = [{"quantity" => 4, "name" => "lightning bolt"}, {"quantity" => 20, "name" =>  "mountain"}]
-decklist = Decklist.new(decklist_array)
+sample = "4 Eldrazi Displacer
+4 Flickerwisp
+4 Leonin Arbiter
+3 Thalia, Guardian of Thraben
+4 Thought-Knot Seer
+3 Lingering Souls
+1 Restoration Angel
+1 Swamp"
+
+decklist = Decklist.new(sample)
 decklist.display
