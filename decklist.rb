@@ -6,16 +6,16 @@ require 'pp'
 
 class Decklist
   attr_accessor :cards
-  def initialize(array)
-    @array = array
-    @cards = {}
+  def initialize(decklist_array)
+    @list = decklist_array 
+    @card_data = {}
     self.get_card_data 
   end
   
   def get_card_data
     identifiers_array = []
-    @array.each do |name|
-      identifiers_array << {"name" => name}
+    @list.each do |line|
+      identifiers_array << {"name" => line["name"]}
     end
     
     query_hash = {"identifiers" => identifiers_array}
@@ -27,18 +27,19 @@ class Decklist
 
     response = http.post(uri.path, query_hash.to_json, json_headers)
     response_hash = JSON.parse(response.body)
-    @cards = response_hash["data"]
+    @card_data = response_hash["data"]
   end
   
   def display
-    @cards.each do |card|
-      string = "#{card["name"]}  #{card["mana_cost"]}  #{card["usd"]}"
+    @list.each_with_index do |line, index|
+      # set local variable card to the corresponding item in @card_data
+      card = @card_data[index]
+      string = "#{line["quantity"]}  #{card["name"]}  #{card["mana_cost"]}  #{card["usd"]}"
       puts string
     end
   end
 end
 
-decklist_array = ["lightning bolt", "mountain", "lava spike", "searing blaze", "eidolon of the great revel", "searing blood", "monastery swiftspear", "bedlam reveler", "harsh mentor", "bomat courier", "thoughtseize"]
-
+decklist_array = [{"quantity" => 4, "name" => "lightning bolt"}, {"quantity" => 20, "name" =>  "mountain"}]
 decklist = Decklist.new(decklist_array)
 decklist.display
