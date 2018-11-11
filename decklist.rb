@@ -16,5 +16,12 @@ class Card
   end
 end
 
-fireball = Card.new("fireball")
-fireball.display
+decklist = []
+decklist_array = ["lightning bolt", "mountain"]
+decklist_array.each do |card|
+  decklist << Card.new(card)
+end
+
+decklist.each do |card|
+  card.display
+end
