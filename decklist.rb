@@ -4,8 +4,17 @@ require 'net/http'
 require 'json'
 require 'pp'
 
-fireball_uri = URI('https://api.scryfall.com/cards/named?fuzzy=fireball')
-fireball_json = Net::HTTP.get(fireball_uri)
-fireball = JSON.parse(fireball_json)
+class Card
+  def initialize(name)
+    @name = name
+    @data = JSON.parse(Net::HTTP.get(URI("https://api.scryfall.com/cards/named?fuzzy=#{name}")))
+  end
+  
+  def display
+    string = "#{@data["name"]} #{@data["mana_cost"]} $#{@data["usd"]} #{@data["tix"]} tix"
+    puts string
+  end
+end
 
-puts fireball["name"]
+fireball = Card.new("fireball")
+fireball.display
