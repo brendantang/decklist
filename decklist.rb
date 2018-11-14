@@ -51,14 +51,8 @@ class Decklist
   end
 end
 
-sample = "4 Eldrazi Displacer
-4 Flickerwisp
-4 Leonin Arbiter
-3 Thalia, Guardian of Thraben
-4 Thought-Knot Seer
-3 Lingering Souls
-1 Restoration Angel
-1 Swamp"
 
-decklist = Decklist.new(sample)
+deck_path = ARGV
+deck_string = File.open(ARGV[0])
+decklist = Decklist.new(deck_string)
 decklist.display
