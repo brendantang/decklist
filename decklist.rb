@@ -8,25 +8,33 @@ class Decklist
   attr_accessor :cards
   def initialize(decklist_string)
     @string = decklist_string
-    @list = [] 
+    @cards = [] 
     @card_data = {}
     self.parse_string
     self.get_card_data 
   end
 
   def parse_string
+    board = "main"
     @string.each_line do |line|
-      card_hash = {}
-      card_hash["quantity"] = line[0]
-      card_hash["name"] = line[2..-1].chomp
-      @list << card_hash
+      if line.chomp.downcase == "mainboard"
+        board = "main"
+      elsif line.chomp.downcase == "sideboard"
+        board = "side"
+      else
+        card_hash = {}
+        card_hash["quantity"] = line[0]
+        card_hash["name"] = line[2..-1].chomp
+        card_hash["board"] = board 
+        @cards << card_hash
+      end
     end
   end
 
   def get_card_data
     identifiers_array = []
-    @list.each do |line|
-      identifiers_array << {"name" => line["name"]}
+    @cards.each do |card|
+      identifiers_array << {"name" => card["name"]}
     end
     
     query_hash = {"identifiers" => identifiers_array}
@@ -42,10 +50,10 @@ class Decklist
   end
   
   def display
-    @list.each_with_index do |line, index|
+    @cards.each_with_index do |card, index|
       # set local variable card to the corresponding item in @card_data
-      card = @card_data[index]
-      string = "#{line["quantity"]}  #{card["name"]}  #{card["mana_cost"]}  #{card["usd"]}"
+      data = @card_data[index]
+      string = "#{card["board"]} #{card["quantity"]}  #{data["name"]}  #{data["mana_cost"]}  #{data["usd"]}"
       puts string
     end
   end
