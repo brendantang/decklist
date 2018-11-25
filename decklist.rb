@@ -1,17 +1,23 @@
-# Read plaintext decklist and output pretty version
-
 require 'net/http'
 require 'json'
 require 'pp'
+
+class String
+  def is_integer?
+     /\A[-+]?\d+\z/ === self
+  end
+end
 
 class Decklist
   attr_accessor :cards
   def initialize(decklist_string)
     @string = decklist_string
     @cards = [] 
-    @card_data = {}
+    @mainboard = []
+    @sideboard = []
     self.parse_string
     self.get_card_data 
+    self.separate_boards
   end
 
   def parse_string
@@ -23,7 +29,11 @@ class Decklist
         board = "side"
       else
         card_hash = {}
-        card_hash["quantity"] = line[0]
+        if line[0].is_integer?
+          card_hash["quantity"] = line[0]
+        else
+          card_hash["quantity"] = 1
+        end
         card_hash["name"] = line[2..-1].chomp
         card_hash["board"] = board 
         @cards << card_hash
@@ -46,14 +56,31 @@ class Decklist
 
     response = http.post(uri.path, query_hash.to_json, json_headers)
     response_hash = JSON.parse(response.body)
-    @card_data = response_hash["data"]
+    # add card data to @cards:
+    @cards.each_with_index do |card, index|
+      @cards[index] = card.merge(response_hash["data"][index])
+    end 
   end
   
+  def separate_boards  
+    @cards.each do |card|
+      if card["board"] == "main"
+        @mainboard << card
+      elsif card["board"] == "side"
+        @sideboard << card
+      end
+    end #TODO: more concise
+  end
+
   def display
-    @cards.each_with_index do |card, index|
-      # set local variable card to the corresponding item in @card_data
-      data = @card_data[index]
-      string = "#{card["board"]} #{card["quantity"]}  #{data["name"]}  #{data["mana_cost"]}  #{data["usd"]}"
+    puts "Mainboard:"
+    @mainboard.each do |card|
+      string = "#{card["quantity"]}  #{card["name"]} #{card["mana_cost"]}"
+      puts string
+    end
+    puts "Sideboard:"
+    @sideboard.each do |card|
+      string = "#{card["quantity"]}  #{card["name"]}"
       puts string
     end
   end
