@@ -1,3 +1,4 @@
+- show when cards aren't found in scryfall
 - nicer formatting, including spacing and colors
 - save path to most recent text file to run by default when no parameter is provided
 - save card data to reduce unnecessary HTTP requests

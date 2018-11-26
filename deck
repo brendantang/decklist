@@ -24,7 +24,7 @@ class Decklist
 
   def parse_string
     board = "main"
-    @string.each_line do |line|
+    @string.squeeze("\n").each_line do |line|
       if line.chomp.downcase == "mainboard"
         board = "main"
       elsif line.chomp.downcase == "sideboard"
@@ -60,7 +60,7 @@ class Decklist
     response_hash = JSON.parse(response.body)
     # add card data to @cards:
     @cards.each_with_index do |card, index|
-      @cards[index] = card.merge(response_hash["data"][index])
+      @cards[index] = card.merge(response_hash["data"][index]) if response_hash["data"][index]
     end 
   end
   
@@ -90,6 +90,6 @@ end
 
 
 deck_path = ARGV
-deck_string = File.open(ARGV[0])
+deck_string = File.read(ARGV[0])
 decklist = Decklist.new(deck_string)
 decklist.display

@@ -5,12 +5,14 @@ Pulls card data from the Scryfall API.
 1. Make sure you already have your bin directory added to `$PATH` (you have something like `export PATH=$PATH:~/bin` in your `.bash_profile` or `.bashrc` or whatever)
 2. Put `deck` in your bin directory :)
 
+
 # Usage
 Run `deck decklist.txt` where decklist.txt is the relative path to your decklist text file.
-Your text file should be formatted like this (unfortunately the script doesn't handle excess line breaks yet):
+Your text file should be formatted like this (you can have unnecessary line breaks):
 
 ~~~
 Mainboard
+
 4 Foundry Street Denizen
 4 Goblin Bushwhacker
 2 Goblin Chieftain
@@ -24,7 +26,9 @@ Mainboard
 19 Mountain
 4 Lightning Bolt
 4 Goblin Grenade
+
 Sideboard
+
 2 Dragon's Claw
 1 Grafdigger's Cage
 2 Relic of Progenitus
