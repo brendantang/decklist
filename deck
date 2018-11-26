@@ -17,9 +17,9 @@ class Decklist
     @cards = [] 
     @mainboard = []
     @sideboard = []
-    self.parse_string
-    self.get_card_data 
-    self.separate_boards
+    parse_string
+    get_card_data 
+    separate_boards
   end
 
   def parse_string
@@ -77,14 +77,17 @@ class Decklist
   def display
     puts "Mainboard:"
     @mainboard.each do |card|
-      string = "#{card["quantity"]}  #{card["name"]} #{card["mana_cost"]} $ #{card["quantity"].to_i * card["usd"].to_f}"
-      puts string
+      print_pretty(card)
     end
     puts "Sideboard:"
     @sideboard.each do |card|
-      string = "#{card["quantity"]}  #{card["name"]}"
-      puts string
+      print_pretty(card)
     end
+  end
+
+  def print_pretty(card)
+    # "#{card["quantity"]}  #{card["name"]} #{card["mana_cost"]} $ #{card["quantity"].to_i * card["usd"].to_f}"
+    printf("%20s", card["name"])
   end
 end
 
