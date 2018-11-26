@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'net/http'
 require 'json'
 require 'pp'
@@ -75,7 +77,7 @@ class Decklist
   def display
     puts "Mainboard:"
     @mainboard.each do |card|
-      string = "#{card["quantity"]}  #{card["name"]} #{card["mana_cost"]}"
+      string = "#{card["quantity"]}  #{card["name"]} #{card["mana_cost"]} $ #{card["quantity"].to_i * card["usd"].to_f}"
       puts string
     end
     puts "Sideboard:"
