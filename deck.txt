@@ -8,4 +8,5 @@ Mainboard
 Sideboard
 3 Lingering Souls
 1 Restoration Angel
-1 Swamp
+3 Swamp
+4 godless shrine

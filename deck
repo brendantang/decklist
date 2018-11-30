@@ -32,7 +32,7 @@ class Decklist
       else
         card_hash = {}
         if line[0].is_integer?
-          card_hash["quantity"] = line[0]
+          card_hash["quantity"] = line[0].to_i
         else
           card_hash["quantity"] = 1
         end
@@ -75,18 +75,52 @@ class Decklist
   end
 
   def display
-    puts "Mainboard:"
+    puts "\n\nMainboard:\n\n"
     @mainboard.each do |card|
       print_pretty(card)
     end
-    puts "Sideboard:"
+    puts "\n\nSideboard:\n\n"
     @sideboard.each do |card|
       print_pretty(card)
     end
+
+    count_types
+    total_price
   end
 
   def print_pretty(card)
     printf("%-5d %-35s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["usd"] || 0)
+  end
+
+  def count_types
+    card_types = {
+      "land" => 0,
+      "creature" => 0,
+      "instant" => 0,
+      "sorcery" => 0,
+      "artifact" => 0,
+      "enchantment" => 0
+    }
+    @cards.each do |card|
+      card_types.each do |type, amount|
+        card_types[type] += card["quantity"] if card["type_line"].downcase.include? type
+      end
+    end
+    puts "\n"
+    card_types.each do |type, amount|
+      print "#{type}: #{amount}  " if amount > 0
+    end
+    puts "\n"
+  end
+
+  def total_price
+    dollars = 0
+    tix = 0
+    @cards.each do |card|
+      dollars += card["usd"].to_f
+      tix += card["tix"].to_f
+    end
+    printf("total cost: $%.2f, %.2f tix \n", dollars, tix)
   end
 end
 
