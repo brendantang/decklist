@@ -86,8 +86,7 @@ class Decklist
   end
 
   def print_pretty(card)
-    # "#{card["quantity"]}  #{card["name"]} #{card["mana_cost"]} $ #{card["quantity"].to_i * card["usd"].to_f}"
-    printf("%20s", card["name"])
+    printf("%-5d %-35s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["usd"] || 0)
   end
 end
 
