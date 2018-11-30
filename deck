@@ -117,8 +117,8 @@ class Decklist
     dollars = 0
     tix = 0
     @cards.each do |card|
-      dollars += card["usd"].to_f
-      tix += card["tix"].to_f
+      dollars += card["usd"].to_f * card["quantity"]
+      tix += card["tix"].to_f * card["quantity"]
     end
     printf("total cost: $%.2f, %.2f tix \n", dollars, tix)
   end
