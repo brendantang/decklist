@@ -1,5 +1,7 @@
-- Display a bottom line with total price, count of creatures, lands, spells, artifacts, enchantments, planeswalkers.
+
+
 - show when cards aren't found in scryfall and don't let that mess up the data (getting wrong quantities when one or more cards not found)
+- sort cards by type and CMC before display
 - adding colors to mana cost display
 - save path to most recent text file to run by default when no parameter is provided
 - save card data to reduce unnecessary HTTP requests

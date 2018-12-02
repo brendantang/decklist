@@ -19,7 +19,10 @@ class Decklist
     @sideboard = []
     parse_string
     get_card_data 
+    parse_types
     separate_boards
+    sort(@mainboard)
+    sort(@sideboard)
   end
 
   def parse_string
@@ -63,7 +66,29 @@ class Decklist
       @cards[index] = card.merge(response_hash["data"][index]) if response_hash["data"][index]
     end 
   end
-  
+
+  def parse_types
+    @cards.each do |card|
+      type_line = card["type_line"].downcase
+      card["type"] = ""
+      card["type"] = if type_line.include? "creature"
+                      "creature"
+                     elsif type_line.include? "land"
+                       "land"
+                     elsif type_line.include? "instant"
+                       "instant"
+                     elsif type_line.include? "sorcery"
+                       "sorcery"
+                     elsif type_line.include? "planeswalker"
+                      "planeswalker"
+                     elsif type_line.include? "enchantment"
+                      "enchantment"
+                     elsif type_line.include? "artifact"
+                       "artifact"
+                     end
+    end
+  end
+
   def separate_boards  
     @cards.each do |card|
       if card["board"] == "main"
@@ -72,6 +97,10 @@ class Decklist
         @sideboard << card
       end
     end #TODO: more concise
+  end
+
+  def sort(cards)
+    cards.sort_by! {|card| [card["type"], card["cmc"]]}
   end
 
   def display
@@ -89,7 +118,7 @@ class Decklist
   end
 
   def print_pretty(card)
-    printf("%-5d %-35s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["usd"] || 0)
+    printf("%-5d %-35s %-15s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["type"], card["usd"] || 0)
   end
 
   def count_types
