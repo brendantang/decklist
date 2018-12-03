@@ -10,6 +10,8 @@ class String
   end
 end
 
+$CARD_TYPES = ["creature","instant","sorcery","artifact","enchantment","planeswalker","land"]
+
 class Decklist
   attr_accessor :cards
   def initialize(decklist_string)
@@ -105,8 +107,11 @@ class Decklist
 
   def display
     puts "\n\nMainboard:\n\n"
-    @mainboard.each do |card|
-      print_pretty(card)
+    $CARD_TYPES.each do |type|
+      puts type if @mainboard.any? {|card| card["type"] == type}
+      @mainboard.each do |card|
+        print_pretty(card) if card["type"] == type
+      end
     end
     puts "\n\nSideboard:\n\n"
     @sideboard.each do |card|
@@ -118,7 +123,7 @@ class Decklist
   end
 
   def print_pretty(card)
-    printf("%-5d %-35s %-15s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["type"], card["usd"] || 0)
+    printf("%-5d %-35s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["usd"] || 0)
   end
 
   def count_types
