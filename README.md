@@ -15,14 +15,14 @@ Mainboard
 
 4 Foundry Street Denizen
 4 Goblin Bushwhacker
-2 Goblin Chieftain
+4 Goblin Chieftain
 4 Goblin Guide
 1 Goblin Heelcutter
 3 Goblin Piledriver
 4 Legion Loyalist
 3 Mogg Fanatic
 4 Mogg War Marshal
- Reckless Bushwhacker
+4 Reckless Bushwhacker
 19 Mountain
 4 Lightning Bolt
 4 Goblin Grenade

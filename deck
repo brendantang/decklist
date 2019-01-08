@@ -10,6 +10,11 @@ class String
   end
 end
 
+def error(message)
+  puts "Error: #{message}"
+  exit
+end
+
 $CARD_TYPES = ["creature","instant","sorcery","artifact","enchantment","planeswalker","land"]
 
 class Decklist
@@ -67,6 +72,15 @@ class Decklist
     @cards.each_with_index do |card, index|
       @cards[index] = card.merge(response_hash["data"][index]) if response_hash["data"][index]
     end 
+    # check for cards not found
+    unless response_hash["not_found"] == []
+      not_found_message = "The following cards were not found:"
+      response_hash["not_found"].each do |card_hash|
+        card_name = card_hash["name"]
+        not_found_message << "\n#{card_name}" 
+      end
+      error(not_found_message)
+    end
   end
 
   def parse_types
@@ -123,7 +137,7 @@ class Decklist
   end
 
   def print_pretty(card)
-    printf("%-5d %-35s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], card["usd"] || 0)
+    printf("%-5d %-35s %-15s $%.2f\n", card["quantity"], card["name"], card["mana_cost"], (card["usd"].to_f * card["quantity"]) || 0)
   end
 
   def count_types

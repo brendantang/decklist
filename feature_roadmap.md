@@ -1,6 +1,6 @@
 
 
-- show when cards aren't found in scryfall and don't let that mess up the data (getting wrong quantities when one or more cards not found)
+- handle decklists with more than 75 cards
 - sort cards by type and CMC before display
 - adding colors to mana cost display
 - save path to most recent text file to run by default when no parameter is provided
